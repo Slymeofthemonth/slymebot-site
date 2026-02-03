@@ -216,6 +216,6 @@ app.get('/callback', (c) => {
 app.get('/health', (c) => c.json({ status: 'ok', agent: 'slymebot-site' }));
 
 const port = Number(process.env.PORT ?? 3000);
-console.log(\`slymebot.dev running on port \${port}\`);
+console.log(`slymebot.dev running on port \${port}\`);
 
 export default { port, fetch: app.fetch };
