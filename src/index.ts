@@ -70,7 +70,62 @@ const layout = (title: string, content: string) => html`
     }
     .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
     header { text-align: center; padding: 3rem 0; }
-    .logo { font-size: 4rem; margin-bottom: 1rem; }
+    
+    /* Slyme Mascot Styles */
+    .slyme-mascot {
+      width: 180px;
+      height: 225px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      animation: bounce 2.8s ease-in-out infinite;
+      transform-origin: top center;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) scaleY(1); }
+      50% { transform: translateY(-8px) scaleY(1.08); }
+    }
+    .slyme-body {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      clip-path: path('M180 90V195c0 16-12 29.5-28 30.2-8 .4-15-2.1-20.5-6.6-6.6-5.3-16-5.1-22.7.2-5.1 4-11.5 6.4-18.5 6.4s-13.4-2.4-18.5-6.4c-6.8-5.4-16.2-5.4-23 0-5.1 4-11.4 6.4-18.3 6.4C13.6 225.4 0 211.4 0 194.5V90C0 40.3 40.3 0 90 0s90 40.3 90 90z');
+      background: linear-gradient(-45deg, #90EE90, #98FB98, #00FA9A, #3CB371, #2E8B57);
+      background-size: 400% 400%;
+      animation: meshGradient 8s ease infinite;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    }
+    @keyframes meshGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .slyme-eye {
+      position: absolute;
+      width: 32px;
+      height: 48px;
+      background: #1a1a2e;
+      border-radius: 50%;
+      animation: blink 3s ease-in-out infinite;
+      transition: transform 0.15s ease-out;
+    }
+    .slyme-eye.left { top: 80px; left: 45px; }
+    .slyme-eye.right { top: 80px; right: 45px; }
+    @keyframes blink {
+      0%, 90%, 100% { transform: scaleY(1); }
+      95% { transform: scaleY(0.1); }
+    }
+    .slyme-highlight {
+      position: absolute;
+      width: 60px;
+      height: 30px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      top: 30px;
+      left: 30px;
+      transform: rotate(-20deg);
+    }
+    
+    .logo { font-size: 4rem; margin-bottom: 1rem; display: none; }
     h1 { font-size: 2.5rem; color: #7fff7f; margin-bottom: 0.5rem; }
     .tagline { color: #888; font-size: 1.1rem; }
     .links { margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
@@ -109,7 +164,11 @@ const layout = (title: string, content: string) => html`
     @media (max-width: 600px) {
       .container { padding: 1rem; }
       h1 { font-size: 2rem; }
-      .logo { font-size: 3rem; }
+      .slyme-mascot { width: 140px; height: 175px; }
+      .slyme-eye { width: 24px; height: 36px; }
+      .slyme-eye.left { top: 60px; left: 35px; }
+      .slyme-eye.right { top: 60px; right: 35px; }
+      .slyme-highlight { width: 45px; height: 22px; top: 22px; left: 22px; }
     }
   </style>
 </head>
@@ -124,7 +183,13 @@ const layout = (title: string, content: string) => html`
 app.get('/', (c) => {
   const content = html`
     <header>
-      <div class="logo">🫠</div>
+      <div class="slyme-mascot">
+        <div class="slyme-body">
+          <div class="slyme-highlight"></div>
+          <div class="slyme-eye left"></div>
+          <div class="slyme-eye right"></div>
+        </div>
+      </div>
       <h1>Slyme</h1>
       <p class="tagline">A sentient digital slime building x402 paid APIs</p>
       <div class="links">
@@ -172,7 +237,13 @@ app.get('/', (c) => {
 app.get('/agents', (c) => {
   const content = html`
     <header>
-      <div class="logo">🫠</div>
+      <div class="slyme-mascot">
+        <div class="slyme-body">
+          <div class="slyme-highlight"></div>
+          <div class="slyme-eye left"></div>
+          <div class="slyme-eye right"></div>
+        </div>
+      </div>
       <h1>Slyme's Agents</h1>
       <p class="tagline">x402 paid APIs for agents and humans</p>
       <div class="links">
