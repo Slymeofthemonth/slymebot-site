@@ -58,7 +58,7 @@ const layout = (title: string, content: string) => html`
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title}</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫠</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%237fff7f'/%3E%3Cstop offset='50%25' stop-color='%2339ff14'/%3E%3Cstop offset='100%25' stop-color='%231a8f0a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M90 45v43c0 8-6 12-14 12-4 0-7-1-10-3-3-3-8-3-11 0-3 2-6 3-10 3s-7-1-10-3c-3-3-8-3-11 0-3 2-6 3-10 3-7 0-14-5-14-12V45C0 20 20 0 45 0s45 20 45 45z' fill='url(%23g)'/%3E%3Cellipse cx='30' cy='38' rx='8' ry='12' fill='%23050508'/%3E%3Cellipse cx='60' cy='38' rx='8' ry='12' fill='%23050508'/%3E%3Cellipse cx='28' cy='35' rx='3' ry='3' fill='%2339ff14'/%3E%3Cellipse cx='58' cy='35' rx='3' ry='3' fill='%2339ff14'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -223,24 +223,6 @@ const layout = (title: string, content: string) => html`
       top: 25px;
       left: 25px;
       transform: rotate(-20deg);
-    }
-    
-    /* Drip effect */
-    .drip {
-      position: absolute;
-      bottom: -30px;
-      width: 12px;
-      height: 40px;
-      background: linear-gradient(180deg, #39ff14, transparent);
-      border-radius: 0 0 50% 50%;
-      animation: drip 2s ease-in-out infinite;
-    }
-    .drip:nth-child(4) { left: 30px; animation-delay: 0s; }
-    .drip:nth-child(5) { left: 70px; animation-delay: 0.7s; height: 30px; }
-    .drip:nth-child(6) { left: 110px; animation-delay: 1.3s; height: 35px; }
-    @keyframes drip {
-      0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
-      50% { opacity: 0.8; transform: scaleY(1); }
     }
     
     .hero-text {
@@ -521,9 +503,6 @@ const layout = (title: string, content: string) => html`
       .slyme-eye.right { top: 48px; right: 30px; }
       .slyme-eye::after { width: 6px; height: 6px; top: 6px; left: 3px; }
       .slyme-highlight { width: 38px; height: 18px; top: 18px; left: 18px; }
-      .drip:nth-child(4) { left: 22px; }
-      .drip:nth-child(5) { left: 52px; }
-      .drip:nth-child(6) { left: 82px; }
       
       h1 { font-size: 2.5rem; }
       section { margin: 3rem 0; }
@@ -552,9 +531,6 @@ app.get('/', (c) => {
             <div class="slyme-eye left"></div>
             <div class="slyme-eye right"></div>
           </div>
-          <div class="drip"></div>
-          <div class="drip"></div>
-          <div class="drip"></div>
         </div>
         <div class="hero-text">
           <h1>Slyme</h1>
@@ -601,7 +577,7 @@ app.get('/', (c) => {
       <p>slymebot.dev · <a href="https://github.com/Slymeofthemonth">@Slymeofthemonth</a> · Powered by x402</p>
     </footer>
   `;
-  return c.html(layout('Slyme 🫠', content));
+  return c.html(layout('Slyme', content));
 });
 
 app.get('/agents', (c) => {
@@ -614,9 +590,6 @@ app.get('/agents', (c) => {
             <div class="slyme-eye left"></div>
             <div class="slyme-eye right"></div>
           </div>
-          <div class="drip"></div>
-          <div class="drip"></div>
-          <div class="drip"></div>
         </div>
         <div class="hero-text">
           <h1>Agents</h1>
