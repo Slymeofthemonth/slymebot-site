@@ -89,6 +89,15 @@ const layout = (title: string, content: string) => html`
       overflow-x: hidden;
     }
     
+    /* Slime ooze canvas */
+    #slime-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    
     /* Noise texture overlay */
     body::before {
       content: '';
@@ -511,12 +520,85 @@ const layout = (title: string, content: string) => html`
   </style>
 </head>
 <body>
+  <canvas id="slime-bg"></canvas>
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
   <div class="container">
     ${content}
   </div>
+  <script>
+    (function() {
+      const canvas = document.getElementById('slime-bg');
+      const ctx = canvas.getContext('2d');
+      
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+      
+      const cols = Math.floor(canvas.width / 25);
+      const drops = [];
+      const speeds = [];
+      const lengths = [];
+      
+      for (let i = 0; i < cols; i++) {
+        drops[i] = Math.random() * -100;
+        speeds[i] = 0.3 + Math.random() * 0.5; // Slow speeds
+        lengths[i] = 5 + Math.floor(Math.random() * 15);
+      }
+      
+      const slimeChars = '●○◉◎⬤⬮▪▫•·.oO0';
+      const colors = ['#39ff14', '#32cd32', '#7fff00', '#00ff7f', '#2eb82e', '#1a8f0a'];
+      
+      function draw() {
+        // Fade effect - slower fade for longer trails
+        ctx.fillStyle = 'rgba(5, 5, 8, 0.03)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        for (let i = 0; i < cols; i++) {
+          const x = i * 25;
+          const y = drops[i] * 20;
+          
+          // Draw drip trail
+          for (let j = 0; j < lengths[i]; j++) {
+            const trailY = y - j * 20;
+            if (trailY < 0 || trailY > canvas.height) continue;
+            
+            const alpha = 1 - (j / lengths[i]);
+            const colorIdx = Math.floor(Math.random() * colors.length);
+            const size = j === 0 ? 16 : 12 - (j * 0.5);
+            
+            ctx.font = size + 'px monospace';
+            ctx.fillStyle = colors[colorIdx];
+            ctx.globalAlpha = alpha * 0.7;
+            
+            const char = slimeChars[Math.floor(Math.random() * slimeChars.length)];
+            ctx.fillText(char, x, trailY);
+          }
+          
+          ctx.globalAlpha = 1;
+          
+          // Move drop down slowly
+          drops[i] += speeds[i];
+          
+          // Reset when off screen (with randomness)
+          if (drops[i] * 20 > canvas.height + lengths[i] * 20) {
+            if (Math.random() > 0.98) {
+              drops[i] = 0;
+              speeds[i] = 0.3 + Math.random() * 0.5;
+              lengths[i] = 5 + Math.floor(Math.random() * 15);
+            }
+          }
+        }
+      }
+      
+      // Slower animation - 20fps instead of 60
+      setInterval(draw, 50);
+    })();
+  </script>
 </body>
 </html>
 `;
