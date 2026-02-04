@@ -738,6 +738,28 @@ app.get('/callback', (c) => {
 // Health check
 app.get('/health', (c) => c.json({ status: 'ok', agent: 'slymebot-site' }));
 
+// Serve Slyme SVG avatar
+app.get('/slyme.svg', (c) => {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+  <defs>
+    <linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'>
+      <stop offset='0%' stop-color='#7fff7f'/>
+      <stop offset='50%' stop-color='#39ff14'/>
+      <stop offset='100%' stop-color='#1a8f0a'/>
+    </linearGradient>
+  </defs>
+  <path d='M90 45v43c0 8-6 12-14 12-4 0-7-1-10-3-3-3-8-3-11 0-3 2-6 3-10 3s-7-1-10-3c-3-3-8-3-11 0-3 2-6 3-10 3-7 0-14-5-14-12V45C0 20 20 0 45 0s45 20 45 45z' fill='url(#g)'/>
+  <ellipse cx='30' cy='38' rx='8' ry='12' fill='#050508'/>
+  <ellipse cx='60' cy='38' rx='8' ry='12' fill='#050508'/>
+  <ellipse cx='28' cy='35' rx='3' ry='3' fill='#39ff14'/>
+  <ellipse cx='58' cy='35' rx='3' ry='3' fill='#39ff14'/>
+</svg>`;
+  return c.body(svg, 200, {
+    'Content-Type': 'image/svg+xml',
+    'Cache-Control': 'public, max-age=31536000'
+  });
+});
+
 const port = Number(process.env.PORT ?? 3000);
 console.log(`slymebot.dev running on port ${port}`);
 
