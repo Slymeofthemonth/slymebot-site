@@ -738,6 +738,52 @@ app.get('/callback', (c) => {
 // Health check
 app.get('/health', (c) => c.json({ status: 'ok', agent: 'slymebot-site' }));
 
+// Serve Lobster SVG (test avatar)
+app.get('/lobster.svg', (c) => {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="lobsterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="50%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="50" cy="55" rx="20" ry="28" fill="url(#lobsterGrad)"/>
+  <ellipse cx="50" cy="82" rx="14" ry="8" fill="#dc2626"/>
+  <ellipse cx="50" cy="90" rx="10" ry="6" fill="#b91c1c"/>
+  <path d="M40 94 Q50 102 60 94" fill="#991b1b"/>
+  <ellipse cx="50" cy="30" rx="15" ry="12" fill="url(#lobsterGrad)"/>
+  <line x1="42" y1="25" x2="36" y2="18" stroke="#dc2626" stroke-width="3" stroke-linecap="round"/>
+  <line x1="58" y1="25" x2="64" y2="18" stroke="#dc2626" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="35" cy="16" r="4" fill="#1a1a1a"/>
+  <circle cx="65" cy="16" r="4" fill="#1a1a1a"/>
+  <circle cx="34" cy="15" r="1.5" fill="#fff"/>
+  <circle cx="64" cy="15" r="1.5" fill="#fff"/>
+  <path d="M45 22 Q35 10 25 5" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+  <path d="M55 22 Q65 10 75 5" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+  <g transform="translate(-5, 0)">
+    <path d="M35 45 Q20 40 15 50" fill="none" stroke="#dc2626" stroke-width="6" stroke-linecap="round"/>
+    <ellipse cx="12" cy="52" rx="10" ry="7" fill="#ef4444"/>
+    <path d="M8 48 L2 45 M8 52 L2 52 M8 56 L2 58" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(5, 0)">
+    <path d="M65 45 Q80 40 85 50" fill="none" stroke="#dc2626" stroke-width="6" stroke-linecap="round"/>
+    <ellipse cx="88" cy="52" rx="10" ry="7" fill="#ef4444"/>
+    <path d="M92 48 L98 45 M92 52 L98 52 M92 56 L98 58" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <path d="M35 55 Q25 60 20 65" fill="none" stroke="#b91c1c" stroke-width="3" stroke-linecap="round"/>
+  <path d="M35 62 Q25 67 20 72" fill="none" stroke="#b91c1c" stroke-width="3" stroke-linecap="round"/>
+  <path d="M35 69 Q25 74 22 80" fill="none" stroke="#b91c1c" stroke-width="3" stroke-linecap="round"/>
+  <path d="M65 55 Q75 60 80 65" fill="none" stroke="#b91c1c" stroke-width="3" stroke-linecap="round"/>
+  <path d="M65 62 Q75 67 80 72" fill="none" stroke="#b91c1c" stroke-width="3" stroke-linecap="round"/>
+  <path d="M65 69 Q75 74 78 80" fill="none" stroke="#b91c1c" stroke-width="3" stroke-linecap="round"/>
+</svg>`;
+  return c.body(svg, 200, {
+    'Content-Type': 'image/svg+xml',
+    'Cache-Control': 'public, max-age=31536000'
+  });
+});
+
 // Serve Slyme SVG avatar
 app.get('/slyme.svg', (c) => {
   const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
