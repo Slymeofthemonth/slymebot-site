@@ -532,71 +532,82 @@ const layout = (title: string, content: string) => html`
       const canvas = document.getElementById('slime-bg');
       const ctx = canvas.getContext('2d');
       
-      function resize() {
+      let cols, drops, speeds, sizes;
+      
+      function init() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        
+        // Fewer, wider-spaced columns for blob effect
+        cols = Math.floor(canvas.width / 80);
+        drops = [];
+        speeds = [];
+        sizes = [];
+        
+        for (let i = 0; i < cols; i++) {
+          drops[i] = Math.random() * -50;
+          speeds[i] = 0.08 + Math.random() * 0.12; // Much slower
+          sizes[i] = 30 + Math.floor(Math.random() * 25); // Large globs
+        }
       }
-      resize();
-      window.addEventListener('resize', resize);
+      init();
+      window.addEventListener('resize', init);
       
-      const cols = Math.floor(canvas.width / 25);
-      const drops = [];
-      const speeds = [];
-      const lengths = [];
-      
-      for (let i = 0; i < cols; i++) {
-        drops[i] = Math.random() * -100;
-        speeds[i] = 0.3 + Math.random() * 0.5; // Slow speeds
-        lengths[i] = 5 + Math.floor(Math.random() * 15);
-      }
-      
-      const slimeChars = '●○◉◎⬤⬮▪▫•·.oO0';
-      const colors = ['#39ff14', '#32cd32', '#7fff00', '#00ff7f', '#2eb82e', '#1a8f0a'];
+      const colors = ['#39ff14', '#32cd32', '#7fff00', '#00ff7f', '#2eb82e'];
       
       function draw() {
-        // Fade effect - slower fade for longer trails
-        ctx.fillStyle = 'rgba(5, 5, 8, 0.03)';
+        // Very slow fade for gooey trails
+        ctx.fillStyle = 'rgba(5, 5, 8, 0.015)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         for (let i = 0; i < cols; i++) {
-          const x = i * 25;
-          const y = drops[i] * 20;
+          const x = i * 80 + 40;
+          const y = drops[i] * 60;
           
-          // Draw drip trail
-          for (let j = 0; j < lengths[i]; j++) {
-            const trailY = y - j * 20;
-            if (trailY < 0 || trailY > canvas.height) continue;
+          if (y > -sizes[i] && y < canvas.height + sizes[i]) {
+            // Draw blob with gradient
+            const gradient = ctx.createRadialGradient(x, y, 0, x, y, sizes[i]);
+            const color = colors[i % colors.length];
+            gradient.addColorStop(0, color);
+            gradient.addColorStop(0.6, color + '88');
+            gradient.addColorStop(1, 'transparent');
             
-            const alpha = 1 - (j / lengths[i]);
-            const colorIdx = Math.floor(Math.random() * colors.length);
-            const size = j === 0 ? 16 : 12 - (j * 0.5);
+            ctx.beginPath();
+            ctx.arc(x, y, sizes[i], 0, Math.PI * 2);
+            ctx.fillStyle = gradient;
+            ctx.fill();
             
-            ctx.font = size + 'px monospace';
-            ctx.fillStyle = colors[colorIdx];
-            ctx.globalAlpha = alpha * 0.7;
-            
-            const char = slimeChars[Math.floor(Math.random() * slimeChars.length)];
-            ctx.fillText(char, x, trailY);
+            // Smaller trailing blobs
+            for (let j = 1; j < 4; j++) {
+              const trailY = y - j * 50;
+              const trailSize = sizes[i] * (1 - j * 0.25);
+              if (trailY < 0) continue;
+              
+              const trailGradient = ctx.createRadialGradient(x, trailY, 0, x, trailY, trailSize);
+              trailGradient.addColorStop(0, color + '66');
+              trailGradient.addColorStop(1, 'transparent');
+              
+              ctx.beginPath();
+              ctx.arc(x, trailY, trailSize, 0, Math.PI * 2);
+              ctx.fillStyle = trailGradient;
+              ctx.fill();
+            }
           }
           
-          ctx.globalAlpha = 1;
-          
-          // Move drop down slowly
+          // Move blob down very slowly
           drops[i] += speeds[i];
           
-          // Reset when off screen (with randomness)
-          if (drops[i] * 20 > canvas.height + lengths[i] * 20) {
-            if (Math.random() > 0.98) {
-              drops[i] = 0;
-              speeds[i] = 0.3 + Math.random() * 0.5;
-              lengths[i] = 5 + Math.floor(Math.random() * 15);
-            }
+          // Reset when off screen
+          if (drops[i] * 60 > canvas.height + 200) {
+            drops[i] = -Math.random() * 20;
+            speeds[i] = 0.08 + Math.random() * 0.12;
+            sizes[i] = 30 + Math.floor(Math.random() * 25);
           }
         }
       }
       
-      // Slower animation - 20fps instead of 60
-      setInterval(draw, 50);
+      // Very slow - ~12fps for gooey feel
+      setInterval(draw, 80);
     })();
   </script>
 </body>
